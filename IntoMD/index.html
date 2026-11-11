@@ -1,10 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>into.Md</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#eef1f6;--sf:#fff;--ink:#101828;--mut:#5b667a;--ln:#d5dbe6;--ac:#2347ff;--acs:#e3e8ff;--acf:#fff;--ok:#0f8a5f;--er:#c8372d;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1118;--sf:#171b25;--ink:#e8ecf5;--mut:#98a2b8;--ln:#2a3142;--ac:#8aa2ff;--acs:#1c2440;--acf:#0e1118;--ok:#4cc48f;--er:#ff7a70;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1118;--sf:#171b25;--ink:#e8ecf5;--mut:#98a2b8;--ln:#2a3142;--ac:#8aa2ff;--acs:#1c2440;--acf:#0e1118;--ok:#4cc48f;--er:#ff7a70;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.5 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:860px;margin:0 auto;padding:clamp(24px,6vw,64px) 20px 56px}
+h1{font-size:clamp(2.3rem,7vw,4.2rem);line-height:.98;letter-spacing:-.035em;font-weight:800;margin:0 0 14px;max-width:11ch}
+.sub{color:var(--mut);font-size:1.1rem;max-width:52ch;margin:0 0 32px}
+.zone{display:block;border:2px dashed var(--ln);border-radius:14px;background:var(--sf);padding:clamp(28px,6vw,52px) 24px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
+.zone:hover,.zone.over,.zone:focus-within{border-color:var(--ac);background:var(--acs)}
+.zone input{position:absolute;opacity:0;width:1px;height:1px}
+.zone strong{display:block;font-size:1.5rem;letter-spacing:-.02em;margin-bottom:4px}
+.zone span{color:var(--mut)}
+.fmts{font:500 .78rem/1.7 "JetBrains Mono",ui-monospace,monospace;color:var(--mut);margin:12px 2px 0}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:36px 0 12px}
+.bar[hidden]{display:none}
+.bar p{margin:0;font-weight:600}
+button{font:inherit;font-size:.9rem;font-weight:600;border:1px solid var(--ln);background:var(--sf);color:var(--ink);border-radius:7px;padding:7px 12px;cursor:pointer}
+button:hover{border-color:var(--ac)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.pri{background:var(--ac);border-color:var(--ac);color:var(--acf)}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.row{display:grid;grid-template-columns:auto 1fr auto;gap:6px 14px;align-items:center;background:var(--sf);border:1px solid var(--ln);border-left:4px solid var(--ac);border-radius:8px;padding:12px 14px}
+.row.error{border-left-color:var(--er)}.row.done{border-left-color:var(--ok)}
+.bd{font:500 .72rem "JetBrains Mono",ui-monospace,monospace;background:var(--acs);color:var(--ac);border-radius:4px;padding:3px 7px;min-width:48px;text-align:center}
+.nm{min-width:0}.nm b{display:block;overflow-wrap:anywhere;font-weight:600}
+.nm small{color:var(--mut)}.error .nm small{color:var(--er)}
+.ac{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.row pre{grid-column:1/-1;margin:6px 0 0;max-height:320px;overflow:auto;background:var(--bg);border:1px solid var(--ln);border-radius:6px;padding:12px;font:400 .8rem/1.55 "JetBrains Mono",ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+#msg{min-height:1.5em;color:var(--mut);margin:14px 0 0;font-size:.9rem}
+details{margin-top:32px;color:var(--mut);font-size:.92rem}summary{cursor:pointer;font-weight:600;color:var(--ink)}
+details p{max-width:64ch}
+@media(max-width:560px){.row{grid-template-columns:auto 1fr}.ac{grid-column:1/-1;justify-content:flex-start}}
+</style>
 </head>
 <body>
+<main>
+  <h1>Files in. Markdown out.</h1>
+  <p class="sub">Convert Word, PDF, PowerPoint, Excel, EPUB, HTML, CSV and more to .md. Add as many files as you like, then download them one by one or all together. Everything runs in your browser, so nothing is uploaded.</p>
 
+  <label class="zone" id="zone">
+    <input type="file" id="pick" multiple>
+    <strong>Drop files here, or browse</strong>
+    <span>You can mix formats in one batch</span>
+  </label>
+  <p class="fmts">docx · pdf · pptx · xlsx · xls · csv · tsv · html · epub · json · xml · ipynb · txt · zip</p>
+
+  <div class="bar" id="bar" hidden>
+    <p id="count"></p>
+    <div class="ac"><button id="clear">Clear all</button><button class="pri" id="bulk">Download all (.zip)</button></div>
+  </div>
+  <ul id="list"></ul>
+  <p id="msg" role="status" aria-live="polite"></p>
+
+  <details>
+    <summary>What’s supported</summary>
+    <p>This page follows the output style of Microsoft’s MarkItDown (headings, lists, tables and links kept as Markdown) using browser libraries, because MarkItDown itself is a Python package. ZIP archives are converted file by file into one document. Images, audio, YouTube links and old .doc/.ppt files aren’t supported here: they need OCR, speech-to-text or Python-only converters.</p>
+  </details>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/turndown@7.2.0/lib/turndown.browser.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/turndown-plugin-gfm@1.0.2/dist/turndown-plugin-gfm.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const ext = n => (n.split('.').pop() || '').toLowerCase();
+const T = b => new TextDecoder('utf-8').decode(b);
+const h = (t, a = {}, ...k) => { const e = document.createElement(t); for (const [x, v] of Object.entries(a)) x.startsWith('on') ? e.addEventListener(x.slice(2), v) : x === 'class' ? e.className = v : e.setAttribute(x, v); e.append(...k.filter(Boolean)); return e; };
+const say = t => $('#msg').textContent = t;
+const fmt = n => n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(1) + ' MB';
+const words = s => s.split(/\s+/).filter(Boolean).length.toLocaleString('en');
+
+let td = null;
+try {
+  td = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced', bulletListMarker: '-', emDelimiter: '*' });
+  if (window.turndownPluginGfm) td.use(turndownPluginGfm.gfm);
+  td.remove(['script', 'style']);
+} catch (e) {}
+const H = html => td.turndown(html).trim();
+try { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; } catch (e) {}
+
+const esc = v => String(v ?? '').replace(/\|/g, '\\|').replace(/\r?\n/g, ' ').trim();
+function table(rows) {
+  rows = rows.filter(r => r.some(c => String(c ?? '').trim() !== ''));
+  if (!rows.length) return '';
+  const w = Math.max(...rows.map(r => r.length));
+  const f = r => '| ' + Array.from({ length: w }, (_, i) => esc(r[i])).join(' | ') + ' |';
+  return [f(rows[0]), '| ' + Array(w).fill('---').join(' | ') + ' |', ...rows.slice(1).map(f)].join('\n');
+}
+const fence = (b, lang) => '```' + lang + '\n' + T(b).trim() + '\n```';
+
+const CONV = {
+  async docx(b) { return H((await mammoth.convertToHtml({ arrayBuffer: b })).value); },
+  async xlsx(b) {
+    const wb = XLSX.read(b, { type: 'array' });
+    return wb.SheetNames.map(n => '## ' + n + '\n\n' + table(XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: false, defval: '' }))).join('\n\n');
+  },
+  async csv(b, n) {
+    if (ext(n) === 'tsv') return table(T(b).split(/\r?\n/).map(l => l.split('\t')));
+    const wb = XLSX.read(T(b), { type: 'string', raw: true });
+    return table(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, raw: false, defval: '' }));
+  },
+  async html(b) { return H(T(b)); },
+  async txt(b) { return T(b).trim(); },
+  async json(b) { return fence(b, 'json'); },
+  async xml(b) { return fence(b, 'xml'); },
+  async ipynb(b) {
+    const j = JSON.parse(T(b));
+    return (j.cells || []).map(c => { const s = [].concat(c.source || []).join(''); return c.cell_type === 'code' ? '```python\n' + s + '\n```' : s; }).join('\n\n');
+  },
+  async pptx(b) {
+    const z = await JSZip.loadAsync(b), dp = new DOMParser();
+    const x = async p => dp.parseFromString(await z.file(p).async('string'), 'application/xml');
+    const txt = el => [...el.getElementsByTagName('a:p')].map(p => [...p.getElementsByTagName('a:t')].map(t => t.textContent).join('')).filter(Boolean);
+    const slides = Object.keys(z.files).filter(f => /^ppt\/slides\/slide\d+\.xml$/.test(f)).sort((a, c) => a.match(/\d+/)[0] - c.match(/\d+/)[0]);
+    const out = [];
+    for (const f of slides) {
+      const n = f.match(/(\d+)\.xml/)[1], d = await x(f);
+      let s = '<!-- Slide number: ' + n + ' -->\n';
+      for (const sp of d.getElementsByTagName('p:sp')) {
+        const ph = sp.getElementsByTagName('p:ph')[0], ty = ph && ph.getAttribute('type') || '', L = txt(sp);
+        if (L.length) s += /title/i.test(ty) ? '\n# ' + L.join(' ') + '\n' : '\n' + L.join('\n\n') + '\n';
+      }
+      for (const tb of d.getElementsByTagName('a:tbl'))
+        s += '\n' + table([...tb.getElementsByTagName('a:tr')].map(r => [...r.getElementsByTagName('a:tc')].map(c => txt(c).join(' ')))) + '\n';
+      const nf = 'ppt/notesSlides/notesSlide' + n + '.xml';
+      if (z.file(nf)) {
+        const nd = await x(nf);
+        const nt = [...nd.getElementsByTagName('p:sp')].filter(sp => { const p = sp.getElementsByTagName('p:ph')[0]; return p && p.getAttribute('type') === 'body'; }).flatMap(sp => txt(sp));
+        if (nt.length) s += '\n### Notes:\n' + nt.join('\n') + '\n';
+      }
+      out.push(s);
+    }
+    return out.join('\n\n');
+  },
+  async epub(b) {
+    const z = await JSZip.loadAsync(b), dp = new DOMParser();
+    const rd = async p => dp.parseFromString(await z.file(p).async('string'), 'application/xml');
+    const opfP = (await rd('META-INF/container.xml')).getElementsByTagName('rootfile')[0].getAttribute('full-path');
+    const opf = await rd(opfP), base = opfP.replace(/[^/]+$/, ''), man = {};
+    [...opf.getElementsByTagName('item')].forEach(i => man[i.getAttribute('id')] = i.getAttribute('href'));
+    const parts = [];
+    for (const r of opf.getElementsByTagName('itemref')) {
+      const href = man[r.getAttribute('idref')], f = z.file(decodeURIComponent(base + href)) || z.file(base + href);
+      if (f) parts.push(H(await f.async('string')));
+    }
+    return parts.join('\n\n---\n\n');
+  },
+  async pdf(b) {
+    const doc = await pdfjsLib.getDocument({ data: new Uint8Array(b) }).promise, pages = [], hs = [];
+    for (let i = 1; i <= doc.numPages; i++) {
+      const tc = await (await doc.getPage(i)).getTextContent(), rows = [];
+      for (const it of tc.items) {
+        if (!it.str || !it.str.trim()) continue;
+        const y = Math.round(it.transform[5]), sz = Math.abs(it.transform[3]) || it.height || 10;
+        let r = rows.find(r => Math.abs(r.y - y) < 3);
+        if (!r) rows.push(r = { y, h: 0, t: [] });
+        r.t.push([it.transform[4], it.str, it.width]); r.h = Math.max(r.h, sz);
+      }
+      rows.sort((a, c) => c.y - a.y);
+      const lines = rows.map((r, k) => {
+        let s = '', end = null;
+        for (const [x, t, w] of r.t.sort((a, c) => a[0] - c[0])) { if (end !== null && x - end > 1 && !s.endsWith(' ') && !t.startsWith(' ')) s += ' '; s += t; end = x + w; }
+        hs.push(r.h);
+        return { s: s.trim(), h: r.h, gap: k ? rows[k - 1].y - r.y : 0 };
+      });
+      pages.push(lines);
+    }
+    hs.sort((a, c) => a - c);
+    const med = hs[Math.floor(hs.length / 2)] || 10;
+    return pages.map(lines => {
+      let o = '';
+      for (const l of lines) {
+        if (l.h >= med * 1.25 && l.s.length < 120) o += '\n\n## ' + l.s + '\n\n';
+        else if (/^[•●▪◦]\s?/.test(l.s)) o += '\n- ' + l.s.replace(/^[•●▪◦]\s?/, '');
+        else o += (l.gap > med * 1.9 ? '\n\n' : ' ') + l.s;
+      }
+      return o.replace(/\n{3,}/g, '\n\n').trim();
+    }).filter(Boolean).join('\n\n');
+  },
+  async zip(b) {
+    const z = await JSZip.loadAsync(b), out = [];
+    for (const f of Object.values(z.files)) {
+      const e = ext(f.name);
+      if (f.dir || e === 'zip' || !CONV[e]) continue;
+      let body;
+      try { body = (await run(f.name, await f.async('arraybuffer'))).trim(); } catch (x) { body = '*Could not convert: ' + x.message + '*'; }
+      out.push('## File: ' + f.name + '\n\n' + body);
+    }
+    return out.join('\n\n') || '*No supported files inside this archive.*';
+  }
+};
+Object.assign(CONV, { xls: CONV.xlsx, xlsm: CONV.xlsx, tsv: CONV.csv, htm: CONV.html, md: CONV.txt, text: CONV.txt });
+
+function run(name, buf) {
+  const e = ext(name), fn = CONV[e];
+  if (!fn) throw new Error(/^(jpe?g|png|gif|webp|bmp|tiff?|wav|mp3|m4a)$/.test(e) ? 'Images and audio need OCR or speech-to-text, which isn’t available here' : '.' + e + ' files aren’t supported');
+  return fn(buf, name);
+}
+
+let files = [];
+const mdName = f => f.name.replace(/\.[^.]+$/, '') + '.md';
+
+async function save(name, data) {
+  try {
+    const d = await (window.claude && window.claude.use ? window.claude.use('downloads') : null);
+    if (d) { await d.save({ filename: name, data }); say('Saved ' + name); return; }
+  } catch (e) { if (e && e.code === 'declined') return; }
+  const u = URL.createObjectURL(data instanceof Blob ? data : new Blob([data], { type: 'text/markdown' }));
+  const a = h('a', { href: u, download: name });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(u), 5000);
+}
+async function copy(f) { try { await navigator.clipboard.writeText(f.md); say('Copied ' + mdName(f)); } catch (e) { say('Copy isn’t available here. Use Download .md instead.'); } }
+async function bulk() {
+  const z = new JSZip(), used = new Set();
+  for (const f of files.filter(f => f.status === 'done')) {
+    let n = mdName(f), i = 1;
+    while (used.has(n)) n = mdName(f).replace(/\.md$/, '-' + (++i) + '.md');
+    used.add(n); z.file(n, f.md);
+  }
+  await save('markdown-export.zip', await z.generateAsync({ type: 'blob' }));
+}
+
+function render() {
+  const ok = files.filter(f => f.status === 'done').length;
+  $('#bar').hidden = !files.length;
+  $('#count').textContent = files.length + (files.length === 1 ? ' file' : ' files') + ', ' + ok + ' converted';
+  $('#bulk').disabled = !ok;
+  $('#list').replaceChildren(...files.map(f => h('li', { class: 'row ' + f.status },
+    h('span', { class: 'bd' }, ext(f.name) || '?'),
+    h('div', { class: 'nm' }, h('b', {}, f.name), h('small', {}, fmt(f.size) + ', ' + (f.status === 'done' ? words(f.md) + ' words' : f.status === 'error' ? f.err : 'Converting…'))),
+    h('div', { class: 'ac' },
+      f.status === 'done' && h('button', { onclick: () => { f.open = !f.open; render(); } }, f.open ? 'Hide' : 'Preview'),
+      f.status === 'done' && h('button', { onclick: () => copy(f) }, 'Copy'),
+      f.status === 'done' && h('button', { class: 'pri', onclick: () => save(mdName(f), f.md) }, 'Download .md'),
+      h('button', { 'aria-label': 'Remove ' + f.name, onclick: () => { files = files.filter(x => x !== f); render(); } }, 'Remove')),
+    f.open && h('pre', {}, f.md.slice(0, 20000) + (f.md.length > 20000 ? '\n\n… preview shortened. Download the file for everything.' : '')))));
+}
+
+async function add(list) {
+  say('');
+  const fs = [...list].map(file => ({ file, name: file.name, size: file.size, status: 'work', md: '' }));
+  files.push(...fs); render();
+  for (const f of fs) {
+    try {
+      f.md = (await run(f.name, await f.file.arrayBuffer())).trim();
+      if (!f.md) throw new Error('No text found. Scanned or image-only files need OCR');
+      f.status = 'done';
+    } catch (e) { f.status = 'error'; f.err = e.message || 'Conversion failed'; }
+    delete f.file; render();
+  }
+}
+
+const zone = $('#zone');
+$('#pick').addEventListener('change', e => { add(e.target.files); e.target.value = ''; });
+['dragenter', 'dragover'].forEach(t => zone.addEventListener(t, e => { e.preventDefault(); zone.classList.add('over'); }));
+['dragleave', 'drop'].forEach(t => zone.addEventListener(t, () => zone.classList.remove('over')));
+zone.addEventListener('drop', e => { e.preventDefault(); add(e.dataTransfer.files); });
+['dragover', 'drop'].forEach(t => window.addEventListener(t, e => e.preventDefault()));
+$('#clear').addEventListener('click', () => { files = []; say(''); render(); });
+$('#bulk').addEventListener('click', bulk);
+</script>
 </body>
 </html>
